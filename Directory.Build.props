@@ -1,0 +1,12 @@
+<Project>
+	<PropertyGroup>
+		<TargetFramework>net9.0-windows</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>annotations</Nullable>
+
+		<Authors>MeinLiX</Authors>
+		<Company>MeinLiX</Company>
+		
+		<RepositoryType>git</RepositoryType>
+	</PropertyGroup>
+</Project>

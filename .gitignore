@@ -1,0 +1,10 @@
+# Visual Studio cache/options directory
+.vs/
+
+# Build results
+[Bb]in/
+[Oo]bj/
+
+# User-specific files
+*.user
+*.db

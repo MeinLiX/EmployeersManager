@@ -1,0 +1,107 @@
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using EmployeersManager.Core;
+using EmployeersManager.Core.Enums;
+using EmployeersManager.Core.Interfaces;
+using EmployeersManager.Core.Models;
+using EmployeersManager.Infrastructure.CustomValidations;
+using Microsoft.Extensions.DependencyInjection;
+using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
+
+namespace EmployeersManager.ViewModels;
+
+public partial class AddEmployeeViewModel : ObservableValidator
+{
+    private readonly IEmployeeRepository _repository;
+
+    [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required(ErrorMessage = "ПІБ не може бути порожнім")]
+    [MinLength(5, ErrorMessage = "ПІБ має містити принаймні 5 символів")]
+    [MaxLength(100, ErrorMessage = "ПІБ не може перевищувати 100 символів")]
+    private string _fullName = string.Empty;
+
+    [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required(ErrorMessage = "Потрібно обрати посаду")]
+    private Position _position = null;
+
+    [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Range(0.01, double.MaxValue, ErrorMessage = "Вкажіть зарплатню")]
+    private decimal _salary;
+
+    [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [CustomValidation(typeof(DateValidator), nameof(DateValidator.ValidateHireDate))]
+    private DateTime _hireDate = DateTime.Today;
+
+    [ObservableProperty]
+    private string _statusMessage = string.Empty;
+
+    [ObservableProperty]
+    private bool _isSuccess = true;
+
+    [ObservableProperty]
+    private ObservableCollection<Position> _positions;
+
+    public AddEmployeeViewModel()
+    {
+        _repository = App.Current.ServicesProvider.GetRequiredService<IEmployeeRepository>();
+
+        Task.Run(async () =>
+        {
+            var positionRepository = App.Current.ServicesProvider.GetRequiredService<IPositionRepository>();
+            Positions = [.. await positionRepository.GetAllAsync()];
+        }, cancellationToken: default); //can determine cancellation token
+    }
+
+    [RelayCommand]
+    private async Task SaveEmployee()
+    {
+        ValidateAllProperties();
+        if (HasErrors)
+        {
+            StatusMessage = "Будь ласка, виправте помилки перед збереженням";
+            IsSuccess = false;
+            return;
+        }
+
+        var employee = new Employee
+        {
+            FullName = FullName,
+            PositionId = Position.Id,
+            Salary = Salary,
+            HireDate = HireDate
+        };
+
+        try
+        {
+            await _repository.AddAsync(employee);
+
+            StatusMessage = "Співробітника успішно додано";
+            IsSuccess = true;
+
+            ClearForm();
+
+            WeakReferenceMessenger.Default.Send(new NavigationMessage(NavigationViewModel.EmloyeeList));
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Помилка: {ex.Message}";
+            IsSuccess = false;
+        }
+    }
+
+    [RelayCommand]
+    private void ClearForm()
+    {
+        FullName = string.Empty;
+        Position = null;
+        Salary = 0;
+        HireDate = DateTime.Today;
+        StatusMessage = string.Empty;
+    }
+}

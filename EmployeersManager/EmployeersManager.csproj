@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>Recources\EmployeersManager.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Recources\EmployeersManager.ico" />
+    <None Remove="Recources\EmployeersManagerIcon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Recources\EmployeersManager.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="LiveCharts.Wpf.NetCore3" />
+    <PackageReference Include="MaterialDesignThemes" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EmployeersManager.Data\EmployeersManager.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Recources\EmployeersManager.ico" />
+  </ItemGroup>
+
+</Project>
