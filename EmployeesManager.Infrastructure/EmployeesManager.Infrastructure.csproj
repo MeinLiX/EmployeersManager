@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MaterialDesignThemes" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EmployeesManager.Core\EmployeesManager.Core.csproj" />
+    <ProjectReference Include="..\EmployeesManager.ViewModels\EmployeesManager.ViewModels.csproj" />
+  </ItemGroup>
+
+</Project>

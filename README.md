@@ -1,7 +1,7 @@
 # EmployeesManager
 
 ## DEMO 
-![](https://github.com/MeinLiX/EmployeersManager/blob/main/EmpManagerDemo.gif)
+![](https://github.com/MeinLiX/EmployeesManager/blob/main/EmpManagerDemo.gif)
 #
 
 ## Requirements

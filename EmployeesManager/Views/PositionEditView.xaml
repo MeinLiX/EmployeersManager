@@ -1,0 +1,134 @@
+﻿<UserControl x:Class="EmployeesManager.Views.PositionEditView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Margin="8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" 
+                   Text="{Binding PageTitle}" 
+                   Style="{StaticResource MaterialDesignHeadline5TextBlock}" 
+                   Margin="0 0 0 24"/>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <materialDesign:Card Padding="24">
+                <StackPanel>
+                    <TextBox materialDesign:HintAssist.Hint="ID" 
+                             Text="{Binding Position.Id}"
+                             IsReadOnly="True"
+                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                             Margin="0 0 0 16"
+                             Visibility="{Binding IsNew, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
+
+                    <TextBox materialDesign:HintAssist.Hint="Назва позиції" 
+                             Text="{Binding Position.Name}"
+                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                             Margin="0 0 0 16"/>
+
+                    <Grid Margin="0 0 0 16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox Grid.Column="0"
+                                 materialDesign:HintAssist.Hint="Колір (HEX формат)" 
+                                 Text="{Binding Position.ColorHEX}"
+                                 Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+
+                        <Border Grid.Column="1"
+                                Width="32" 
+                                Height="32" 
+                                CornerRadius="16"
+                                Margin="16 0 0 0"
+                                Background="{Binding Position.ColorHEX}">
+                            <Border.Effect>
+                                <DropShadowEffect ShadowDepth="1" BlurRadius="3" Opacity="0.3"/>
+                            </Border.Effect>
+                        </Border>
+                    </Grid>
+
+                    <CheckBox Content="Активна позиція" 
+                              IsChecked="{Binding Position.Enabled}"
+                              Style="{StaticResource MaterialDesignCheckBox}"
+                              Margin="0 0 0 16"/>
+
+                    <materialDesign:Card Padding="16" Margin="0 0 0 16">
+                        <StackPanel>
+                            <TextBlock Text="Попередній перегляд" 
+                                       Style="{StaticResource MaterialDesignSubtitle2TextBlock}" 
+                                       Margin="0 0 0 8"/>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Border Grid.Column="0"
+                                        Width="60" 
+                                        Height="60" 
+                                        CornerRadius="30"
+                                        Margin="0 0 16 0"
+                                        Background="{Binding Position.ColorHEX}">
+                                    <TextBlock Text="{Binding Position.Name, Converter={StaticResource NameToInitialsConverter}}"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Center"
+                                               FontSize="24"
+                                               FontWeight="Bold"
+                                               Foreground="White"/>
+                                </Border>
+
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Position.Name}" 
+                                               FontWeight="Bold" 
+                                               FontSize="16"/>
+                                    <TextBlock Text="Співробітник" 
+                                               Opacity="0.6"/>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </materialDesign:Card>
+                </StackPanel>
+            </materialDesign:Card>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="2" 
+                    Orientation="Horizontal" 
+                    HorizontalAlignment="Right" 
+                    Margin="0 16 0 0">
+            <Button Content="Скасувати" 
+                    Command="{Binding CancelCommand}"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Margin="0 0 8 0"/>
+
+            <Button Content="Зберегти" 
+                    Command="{Binding SaveCommand}"
+                    IsEnabled="{Binding IsSaving, Converter={StaticResource InverseBooleanConverter}}"
+                    Style="{StaticResource MaterialDesignRaisedButton}">
+                <Button.Resources>
+                    <system:Boolean x:Key="MaterialDesignOutlinedButtonTabStop">False</system:Boolean>
+                </Button.Resources>
+            </Button>
+        </StackPanel>
+
+        <!-- Індикатор завантаження при збереженні -->
+        <Grid Grid.Row="0" Grid.RowSpan="3" 
+              Background="#80000000"
+              Visibility="{Binding IsSaving, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <ProgressBar IsIndeterminate="True" 
+                         Style="{StaticResource MaterialDesignCircularProgressBar}" 
+                         Width="50" 
+                         Height="50"/>
+        </Grid>
+    </Grid>
+</UserControl>

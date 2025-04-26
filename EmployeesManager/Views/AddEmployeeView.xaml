@@ -1,0 +1,67 @@
+﻿<UserControl x:Class="EmployeesManager.Views.AddEmployeeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <materialDesign:Card Margin="16" Padding="16">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" 
+                       Text="Додати нового співробітника" 
+                       Style="{StaticResource MaterialDesignHeadline5TextBlock}" 
+                       Margin="0,0,0,24"/>
+
+            <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0,8">
+                <TextBox materialDesign:HintAssist.Hint="ПІБ"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                         Text="{Binding FullName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                         Margin="0,8,0,16"/>
+
+                <ComboBox materialDesign:HintAssist.Hint="Посада"
+                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                          ItemsSource="{Binding Positions}"
+                          SelectedItem="{Binding Position, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                          DisplayMemberPath="Name"  materialDesign:ValidationAssist.UsePopup="True" Margin="0,0,0,16"/>
+
+                <TextBox materialDesign:HintAssist.Hint="Заробітна плата"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                         Text="{Binding Salary, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                         Margin="0,0,0,16">
+                    <materialDesign:TextFieldAssist.PrefixText>₴</materialDesign:TextFieldAssist.PrefixText>
+                </TextBox>
+
+                <DatePicker materialDesign:HintAssist.Hint="Дата прийому на роботу"
+                            Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                            SelectedDate="{Binding HireDate, ValidatesOnDataErrors=True}" 
+                            Margin="0,0,0,16"/>
+
+                <materialDesign:Snackbar 
+                    IsActive="{Binding StatusMessage, Converter={StaticResource StringToVisibilityConverter}, ConverterParameter=True}"
+                    Message="{Binding StatusMessage}"
+                    Background="{Binding IsSuccess, Converter={StaticResource BoolToColorConverter}, ConverterParameter=Status}"
+                    Margin="0,8,0,0"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" 
+                        Orientation="Horizontal" 
+                        HorizontalAlignment="Right" 
+                        Margin="0,16,0,0">
+                <Button Content="Очистити" 
+                        Command="{Binding ClearFormCommand}"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Margin="0,0,16,0"/>
+                <Button Content="Зберегти" 
+                        Command="{Binding SaveEmployeeCommand}"
+                        Style="{StaticResource MaterialDesignOutlinedSecondaryLightButton}"/>
+            </StackPanel>
+        </Grid>
+    </materialDesign:Card>
+</UserControl>
