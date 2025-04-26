@@ -7,7 +7,7 @@ using Microsoft.Win32;
 
 namespace EmployeersManager.ViewModels.Dialog;
 
-public partial class ExportImportDialogViewModel : ObservableObject
+public partial class ExportImportDialogViewModel : ObservableObject, IDialogViewModel
 {
     private readonly IDataExportService _exportService;
     private readonly IDataImportService _importService;

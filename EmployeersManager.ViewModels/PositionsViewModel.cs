@@ -5,7 +5,6 @@ using EmployeersManager.Core;
 using EmployeersManager.Core.Enums;
 using EmployeersManager.Core.Interfaces;
 using EmployeersManager.Core.Models;
-using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
 using System.Windows;
 
@@ -15,9 +14,9 @@ public partial class PositionsViewModel : ObservableObject
 {
     private readonly IPositionRepository _positionRepository;
 
-    public PositionsViewModel()
+    public PositionsViewModel(IPositionRepository positionRepository)
     {
-        _positionRepository = App.Current.ServicesProvider.GetRequiredService<IPositionRepository>();
+        _positionRepository = positionRepository;
         LoadPositionsCommand.Execute(null);
     }
 
@@ -53,7 +52,7 @@ public partial class PositionsViewModel : ObservableObject
     [RelayCommand]
     private void AddPosition()
     {
-        WeakReferenceMessenger.Default.Send(new NavigationMessage<Position>(NavigationViewModel.PositionEdit, new Position { Enabled = true, ColorHEX = "#FFFFFFFF"}));
+        WeakReferenceMessenger.Default.Send(new NavigationMessage<Position>(ViewModelNavigation.PositionEdit, new Position { Enabled = true, ColorHEX = "#FFFFFFFF"}));
     }
 
     [RelayCommand]
@@ -61,7 +60,7 @@ public partial class PositionsViewModel : ObservableObject
     {
         if (SelectedPosition != null)
         {
-            WeakReferenceMessenger.Default.Send(new NavigationMessage<Position>(NavigationViewModel.PositionEdit, SelectedPosition));
+            WeakReferenceMessenger.Default.Send(new NavigationMessage<Position>(ViewModelNavigation.PositionEdit, SelectedPosition));
         }
     }
 

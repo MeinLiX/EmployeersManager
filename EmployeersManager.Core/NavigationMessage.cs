@@ -2,11 +2,11 @@
 
 namespace EmployeersManager.Core;
 
-public class NavigationMessage(NavigationViewModel toNavigate) : NavigationMessage<object>(toNavigate, default)
+public class NavigationMessage(ViewModelNavigation toNavigate) : NavigationMessage<object>(toNavigate, default)
 { }
 
-public class NavigationMessage<T>(NavigationViewModel toNavigate, T? arg) where T : class
+public class NavigationMessage<T>(ViewModelNavigation toNavigate, T? arg) where T : class
 {
-    public NavigationViewModel ToNavigate = toNavigate;
+    public ViewModelNavigation ToNavigate = toNavigate;
     public T? Arg { get; set; } = arg;
 }

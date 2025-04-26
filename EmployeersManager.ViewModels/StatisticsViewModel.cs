@@ -4,7 +4,6 @@ using EmployeersManager.Core.Interfaces;
 using LiveCharts;
 using LiveCharts.Defaults;
 using LiveCharts.Wpf;
-using Microsoft.Extensions.DependencyInjection;
 using System.Windows.Media;
 
 namespace EmployeersManager.ViewModels;
@@ -34,10 +33,10 @@ public partial class StatisticsViewModel : ObservableObject
     private SeriesCollection _employeePositionsSeries;
 
 
-    public StatisticsViewModel()
+    public StatisticsViewModel(IEmployeeRepository employeeRepository, IPositionRepository positionRepository)
     {
-        _repository = App.Current.ServicesProvider.GetRequiredService<IEmployeeRepository>();
-        _positionsRepository = App.Current.ServicesProvider.GetRequiredService<IPositionRepository>();
+        _repository = employeeRepository;
+        _positionsRepository = positionRepository;
         LoadStatisticsCommand.Execute(null);
     }
 

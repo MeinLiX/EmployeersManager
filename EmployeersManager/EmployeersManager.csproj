@@ -25,6 +25,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EmployeersManager.Data\EmployeersManager.Data.csproj" />
+    <ProjectReference Include="..\EmployeersManager.Infrastructure\EmployeersManager.Infrastructure.csproj" />
+    <ProjectReference Include="..\EmployeersManager.ViewModels\EmployeersManager.ViewModels.csproj" />
   </ItemGroup>
 
   <ItemGroup>

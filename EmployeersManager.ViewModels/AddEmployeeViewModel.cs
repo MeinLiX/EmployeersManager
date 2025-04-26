@@ -5,8 +5,6 @@ using EmployeersManager.Core;
 using EmployeersManager.Core.Enums;
 using EmployeersManager.Core.Interfaces;
 using EmployeersManager.Core.Models;
-using EmployeersManager.Infrastructure.CustomValidations;
-using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -14,7 +12,8 @@ namespace EmployeersManager.ViewModels;
 
 public partial class AddEmployeeViewModel : ObservableValidator
 {
-    private readonly IEmployeeRepository _repository;
+    private readonly IEmployeeRepository _employeeRepository;
+    private readonly IPositionRepository _positionRepository;
 
     [ObservableProperty]
     [NotifyDataErrorInfo]
@@ -47,14 +46,14 @@ public partial class AddEmployeeViewModel : ObservableValidator
     [ObservableProperty]
     private ObservableCollection<Position> _positions;
 
-    public AddEmployeeViewModel()
+    public AddEmployeeViewModel(IEmployeeRepository employeeRepository, IPositionRepository positionRepository)
     {
-        _repository = App.Current.ServicesProvider.GetRequiredService<IEmployeeRepository>();
+        _employeeRepository = employeeRepository;
+        _positionRepository = positionRepository;
 
         Task.Run(async () =>
         {
-            var positionRepository = App.Current.ServicesProvider.GetRequiredService<IPositionRepository>();
-            Positions = [.. await positionRepository.GetAllAsync()];
+            Positions = [.. await _positionRepository.GetAllAsync()];
         }, cancellationToken: default); //can determine cancellation token
     }
 
@@ -79,14 +78,14 @@ public partial class AddEmployeeViewModel : ObservableValidator
 
         try
         {
-            await _repository.AddAsync(employee);
+            await _employeeRepository.AddAsync(employee);
 
             StatusMessage = "Співробітника успішно додано";
             IsSuccess = true;
 
             ClearForm();
 
-            WeakReferenceMessenger.Default.Send(new NavigationMessage(NavigationViewModel.EmloyeeList));
+            WeakReferenceMessenger.Default.Send(new NavigationMessage(ViewModelNavigation.EmloyeeList));
         }
         catch (Exception ex)
         {
@@ -103,5 +102,18 @@ public partial class AddEmployeeViewModel : ObservableValidator
         Salary = 0;
         HireDate = DateTime.Today;
         StatusMessage = string.Empty;
+    }
+}
+
+public static class DateValidator
+{
+    public static ValidationResult ValidateHireDate(DateTime date, ValidationContext context)
+    {
+        if (date > DateTime.Today)
+        {
+            return new ValidationResult("Дата прийняття не може бути у майбутньому");
+        }
+
+        return ValidationResult.Success;
     }
 }

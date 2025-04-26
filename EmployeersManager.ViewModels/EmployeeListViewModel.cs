@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using EmployeersManager.Core.Interfaces;
 using EmployeersManager.Core.Models;
-using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
 using System.Windows;
 
@@ -21,9 +20,9 @@ public partial class EmployeeListViewModel : ObservableObject
     [ObservableProperty]
     private Employee _selectedEmployee;
 
-    public EmployeeListViewModel()
+    public EmployeeListViewModel(IEmployeeRepository employeeRepository)
     {
-        _repository = App.Current.ServicesProvider.GetRequiredService<IEmployeeRepository>();
+        _repository = employeeRepository;
         LoadEmployeesCommand.Execute(null);
     }
 

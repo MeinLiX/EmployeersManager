@@ -1,8 +1,8 @@
 ﻿using EmployeersManager.Core.Interfaces;
 using EmployeersManager.Core.Models;
-using EmployeersManager.Dialog;
 using EmployeersManager.ViewModels.Dialog;
 using MaterialDesignThemes.Wpf;
+using System.Windows.Controls;
 
 namespace EmployeersManager.Infrastructure.Services;
 
@@ -20,7 +20,7 @@ public class DialogService : IDialogService
         _employeeRepository = employeeRepository;
     }
 
-    public async Task<bool> ShowExportDialogAsync()
+    public async Task<bool> ShowExportDialogAsync(Func<IDialogViewModel, IDialogView> initialView)
     {
         var dialogViewModel = new ExportImportDialogViewModel(
             isExportMode: true,
@@ -29,16 +29,13 @@ public class DialogService : IDialogService
             dialogService: this,
             employees: await _employeeRepository.GetAllAsync());
 
-        var view = new ExportImportDialog
-        {
-            DataContext = dialogViewModel
-        };
+        var view = initialView.Invoke(dialogViewModel);
 
         var result = await DialogHost.Show(view, DialogIdentifier);
         return result is bool boolResult && boolResult;
     }
 
-    public async Task<bool> ShowImportDialogAsync(Action<IEnumerable<Employee>> importCallback)
+    public async Task<bool> ShowImportDialogAsync(Action<IEnumerable<Employee>> importCallback, Func<IDialogViewModel, IDialogView> initialView)
     {
         var dialogViewModel = new ExportImportDialogViewModel(
             isExportMode: false,
@@ -47,10 +44,7 @@ public class DialogService : IDialogService
             dialogService: this,
             importCallback: importCallback);
 
-        var view = new ExportImportDialog
-        {
-            DataContext = dialogViewModel
-        };
+        var view = initialView.Invoke(dialogViewModel);
 
         var result = await DialogHost.Show(view, DialogIdentifier);
         return result is bool boolResult && boolResult;

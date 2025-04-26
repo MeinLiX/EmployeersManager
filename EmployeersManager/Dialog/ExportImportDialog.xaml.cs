@@ -1,28 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using EmployeersManager.Core.Interfaces;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace EmployeersManager.Dialog
 {
-    /// <summary>
-    /// Interaction logic for ExportImportDialog.xaml
-    /// </summary>
-    public partial class ExportImportDialog : UserControl
+    public partial class ExportImportDialog : UserControl, IDialogView
     {
         public ExportImportDialog()
         {
             InitializeComponent();
+        }
+
+        public IDialogView BindViewModel(IDialogViewModel viewModel)
+        {
+            DataContext = viewModel;
+            return this;
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace EmployeersManager.Core.Enums;
 
-public enum NavigationViewModel
+public enum ViewModelNavigation
 {
     AddEmployee,
     EmloyeeList,

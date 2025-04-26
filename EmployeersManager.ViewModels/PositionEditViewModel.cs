@@ -5,7 +5,6 @@ using EmployeersManager.Core;
 using EmployeersManager.Core.Enums;
 using EmployeersManager.Core.Interfaces;
 using EmployeersManager.Core.Models;
-using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 
 namespace EmployeersManager.ViewModels;
@@ -26,12 +25,12 @@ public partial class PositionEditViewModel : ObservableObject
     [ObservableProperty]
     private string _pageTitle;
 
-    public PositionEditViewModel()
+    public PositionEditViewModel(IPositionRepository positionRepository)
     {
-        _positionRepository = App.Current.ServicesProvider.GetRequiredService<IPositionRepository>();
+        _positionRepository = positionRepository;
     } 
     
-    public PositionEditViewModel(Position position) : this()
+    public PositionEditViewModel(IPositionRepository positionRepository, Position position) : this(positionRepository)
     {
         Initialize(position);
     }
@@ -78,7 +77,7 @@ public partial class PositionEditViewModel : ObservableObject
                 await _positionRepository.UpdateAsync(Position);
             }
 
-            WeakReferenceMessenger.Default.Send(new NavigationMessage(NavigationViewModel.Positions));
+            WeakReferenceMessenger.Default.Send(new NavigationMessage(ViewModelNavigation.Positions));
         }
         catch (Exception ex)
         {
@@ -93,7 +92,7 @@ public partial class PositionEditViewModel : ObservableObject
     [RelayCommand]
     private void Cancel()
     {
-        WeakReferenceMessenger.Default.Send(new NavigationMessage(NavigationViewModel.Positions));
+        WeakReferenceMessenger.Default.Send(new NavigationMessage(ViewModelNavigation.Positions));
     }
 
     private static bool IsValidHexColor(string color)

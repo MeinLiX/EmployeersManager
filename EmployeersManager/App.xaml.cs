@@ -1,11 +1,14 @@
-﻿using EmployeersManager.Core.Interfaces;
+﻿using EmployeersManager.Core.Enums;
+using EmployeersManager.Core.Interfaces;
 using EmployeersManager.Core.Models;
 using EmployeersManager.Data.Context;
 using EmployeersManager.Data.Repositories;
+using EmployeersManager.Dialog;
 using EmployeersManager.Infrastructure.Services;
 using EmployeersManager.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
@@ -41,6 +44,7 @@ public partial class App : Application
         services.AddSingleton<IDialogService, DialogService>();
 
         services.AddTransient<MainViewModel>();
+        services.TryAddKeyedTransient<IDialogView, ExportImportDialog>(DialogViews.ExportImportDialog);
     }
 
     protected override void OnStartup(StartupEventArgs e)
